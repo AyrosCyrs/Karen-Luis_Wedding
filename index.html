@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Save the Date · Karen & Luis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:      #fdf8f0;
+      --gold:       #b8953a;
+      --gold-light: #d4af5a;
+      --gold-pale:  #e8d5a0;
+      --purple:     #7b5ea7;
+      --text:       #4a3728;
+      --flower-size: 250px;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--cream);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── PAGE ── */
+    .page {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 24px 120px;
+    }
+
+    /* ── CORNER FLOWERS ── */
+    .flor {
+      position: fixed;
+      width: var(--flower-size);
+      height: auto;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0;
+      animation: fadeIn 1.2s ease forwards;
+    }
+
+    /* Superior izquierda — flor-izquierda.png tal cual */
+    .flor-tl {
+      top: -70px; left: -60px;
+      transform-origin: top left;
+      animation-delay: 0.2s;
+    }
+
+    /* Superior derecha — flor-derecha.png espejada horizontal */
+    .flor-tr {
+      top: -40px; right: -20px;
+      transform-origin: top right;
+      animation-delay: 0.35s;
+    }
+
+    /* Inferior izquierda — flor-derecha.png espejada vertical */
+    .flor-bl {
+      bottom: -30px; left: -20px;
+      transform: scale(-1);
+      animation-delay: 0.5s;
+    }
+
+    /* Inferior derecha — flor-izquierda.png rotada 180° */
+    .flor-br {
+      bottom: 350px; right: 190px;
+      transform: rotate(180deg);
+      transform-origin: bottom right;
+      animation-delay: 0.65s;
+    }
+
+    /* ── CARD ── */
+    .card {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 460px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* ── RINGS ── */
+    .rings-wrap {
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: floatIn 1s ease 0.4s forwards;
+    }
+    .rings-wrap svg {
+      width: 100px;
+      filter: drop-shadow(0 4px 14px rgba(184,149,58,0.4));
+      animation: floatRing 4s ease-in-out 1.5s infinite;
+    }
+
+        .rings-img {
+          width: 100px;
+          animation: floatRing 4s ease-in-out infinite;
+          filter: drop-shadow(0 4px 14px rgba(184,149,58,0.35));
+        }
+
+    /* ── INVITE TEXT ── */
+    .invite-text {
+      font-size: 1rem;
+      font-weight: 300;
+      font-style: italic;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+      line-height: 1.7;
+      margin-bottom: 22px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.6s forwards;
+    }
+
+    /* ── NAMES BLOCK ── */
+    .names-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;   /* centra Karen, y, Luis entre sí */
+      width: 100%;
+    }
+
+    .name {
+      font-family: 'Great Vibes', cursive;
+      color: var(--gold);
+      display: block;
+      width: 100%;
+      text-align: center;
+      line-height: 1.05;
+      opacity: 0;
+    }
+    .name-karen {
+      font-size: clamp(4.2rem, 14vw, 5.8rem);
+      animation: fadeUp 1s ease 0.75s forwards;
+    }
+    .name-y {
+      font-size: clamp(2.4rem, 8vw, 3.4rem);
+      color: var(--gold-light);
+      margin: 2px 0;          /* separación mínima, sin descentrar */
+      animation: fadeUp 1s ease 0.9s forwards;
+    }
+    .name-luis {
+      font-size: clamp(4.2rem, 14vw, 5.8rem);
+      animation: fadeUp 1s ease 1.05s forwards;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      margin: 26px 0;
+      opacity: 0;
+      animation: fadeIn 1s ease 1.2s forwards;
+    }
+    .divider span {
+      display: block;
+      width: 160px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+    }
+
+     /* ── DATE ── */
+
+    .date-wrap {
+      opacity: 0;
+      animation: fadeUp 1s ease 1.3s forwards;
+      margin: 28px 0 10px;
+    }
+    .date-row-container {
+      display: flex;
+      align-items: center;      /* alinea las tres columnas al centro */
+      justify-content: center;
+      gap: 18px;
+    }
+    .date-side-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;    /* texto centrado verticalmente */
+      width: 90px;
+      gap: 6px;                   /* espacio entre línea y texto */
+    }
+    /* Las líneas arriba y abajo del texto — misma clase para ambas columnas */
+    .date-side-col .date-bar {
+      display: block;
+      width: 100%;
+      height: 1px;
+      background: var(--gold);
+    }
+    .date-center-col {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .date-month,
+    .date-year {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+    .date-day {
+      font-family: 'Cinzel', serif;
+      font-size: 4.5rem;
+      font-weight: 400;
+      color: var(--gold);
+      line-height: 1;
+      padding: 0 4px;
+    }
+
+    /* ── VENUE ── */
+    .venue {
+      opacity: 0;
+      animation: fadeUp 1s ease 1.5s forwards;
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .venue-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .venue-name:hover { color: var(--purple); }
+    .venue-address {
+      font-size: 0.9rem;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      line-height: 1.7;
+      opacity: 0.8;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes floatIn {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes floatRing {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-7px); }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 480px) {
+      :root { --flower-size: 170px; }
+      .page { padding: 80px 16px 100px; }
+      .countdown { gap: 2px; }
+      .countdown-item { min-width: 42px; }
+      .countdown-num { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <img class="flor flor-tl" src="assets/img/flor-izquierda.png" alt="">
+  <img class="flor flor-tr" src="assets/img/flor-derecha.png"   alt="">
+  <img class="flor flor-bl" src="assets/img/flor-derecha.png"   alt="">
+  <img class="flor flor-br" src="assets/img/flor-izquierda.png" alt="">
+
+  <div class="page">
+    <div class="card">
+
+      <img src="assets/img/anillos.png" class="rings-img" alt="anillos">
+
+      <!-- TEXTO INTRODUCTORIO -->
+      <p class="invite-text">
+        Nos complace invitarte a la celebración<br>de nuestra boda
+      </p>
+
+      <!-- NOMBRES -->
+      <div class="names-block">
+        <span class="name name-karen">Karen</span>
+        <span class="name name-y">&</span>
+        <span class="name name-luis">Luis</span>
+      </div>
+
+
+
+      <!-- FECHA -->
+     <div class="date-wrap">
+        <div class="date-row-container">
+ 
+          <!-- Columna izquierda: línea — AGOSTO — línea -->
+          <div class="date-side-col col-left">
+            <span class="date-bar"></span>
+            <span class="date-month">Agosto</span>
+            <span class="date-bar"></span>
+          </div>
+ 
+          <!-- Columna central: el 23 grande -->
+          <div class="date-center-col">
+            <span class="date-day">23</span>
+          </div>
+ 
+          <!-- Columna derecha: línea — 2026 — línea -->
+          <div class="date-side-col col-right">
+            <span class="date-bar"></span>
+            <span class="date-year">2026</span>
+            <span class="date-bar"></span>
+          </div>
+ 
+        </div>
+      </div>
+
+      <!-- VENUE -->
+      <div class="venue">
+        <a class="venue-name"
+           href="https://maps.app.goo.gl/rvLZ3tEvZ3SM7Vjn6"
+           target="_blank">
+          Salón Palacio Real
+        </a>
+        <p class="venue-address">
+          Hecelchakán 89, Mz 23 Lt 11<br>
+          Cuchilla de Padierna, Tlalpan, CDMX
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const boda = new Date('2026-08-23T18:00:00-06:00');
+
+    function tick() {
+      const diff = boda - new Date();
+      if (diff <= 0) {
+        ['cd-dias','cd-horas','cd-min','cd-seg'].forEach(id =>
+          document.getElementById(id).textContent = '0'
+        );
+        return;
+      }
+      const dias  = Math.floor(diff / 864e5);
+      const horas = Math.floor((diff % 864e5) / 36e5);
+      const min   = Math.floor((diff % 36e5)  / 6e4);
+      const seg   = Math.floor((diff % 6e4)   / 1e3);
+
+      document.getElementById('cd-dias').textContent  = dias;
+      document.getElementById('cd-horas').textContent = String(horas).padStart(2,'0');
+      document.getElementById('cd-min').textContent   = String(min).padStart(2,'0');
+      document.getElementById('cd-seg').textContent   = String(seg).padStart(2,'0');
+    }
+    tick();
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>
