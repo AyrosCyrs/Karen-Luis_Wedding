@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Karen & Luis · Tu Invitación</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:       #fdf8f0;
+      --cream-dark:  #f0e8d8;
+      --gold:        #b8953a;
+      --gold-light:  #d4af5a;
+      --gold-pale:   #e8d5a0;
+      --purple:      #6b3fa0;
+      --purple-dark: #4a2870;
+      --purple-mid:  #8b5cc8;
+      --text:        #3a2a1a;
+      --envelope-w:  min(420px, 90vw);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--cream);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      color: var(--text);
+      overflow: hidden;   /* sin scroll en la pantalla del sobre */
+    }
+
+    /* ══════════════════════════════════
+       FONDO — pétalos / partículas doradas
+    ══════════════════════════════════ */
+    .bg-particles {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0;
+      animation: drift linear infinite;
+    }
+
+    /* ══════════════════════════════════
+       FLORES DE ESQUINA (mismas que index)
+    ══════════════════════════════════ */
+    /* ── CORNER FLOWERS ── */
+    .flor {
+      position: fixed;
+      width: min(240px, 38vw);
+      height: auto;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0;
+      animation: fadeIn 1.2s ease forwards;
+    }
+
+    /* Superior izquierda — flor-izquierda.png tal cual */
+    .flor-tl {
+      top: -70px; left: -60px;
+      transform-origin: top left;
+      animation-delay: 0.2s;
+    }
+
+    /* Superior derecha — flor-derecha.png espejada horizontal */
+    .flor-tr {
+      top: -40px; right: -20px;
+      transform-origin: top right;
+      animation-delay: 0.35s;
+    }
+
+    /* Inferior izquierda — flor-derecha.png espejada vertical */
+    .flor-bl {
+      bottom: -30px; left: -20px;
+      transform: scale(-1);
+      animation-delay: 0.5s;
+    }
+
+    /* Inferior derecha — flor-izquierda.png rotada 180° */
+    .flor-br {
+      bottom: -70px; right: -60px;
+      transform: rotate(180deg);
+      animation-delay: 0.65s;
+    }
+
+    /* ══════════════════════════════════
+       ESCENA PRINCIPAL
+    ══════════════════════════════════ */
+    .scene {
+      position: relative;
+      z-index: 10;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      padding: 20px;
+    }
+
+    /* ── Título arriba del sobre ── */
+    .title-block {
+      text-align: center;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.4s forwards;
+    }
+    .title-block .eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .title-block .names {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2.8rem, 10vw, 4rem);
+      color: var(--purple);
+      line-height: 1;
+      filter: drop-shadow(0 2px 8px rgba(107,63,160,0.2));
+    }
+
+    /* ══════════════════════════════════
+       SOBRE
+    ══════════════════════════════════ */
+    .envelope-wrap {
+      position: relative;
+      width: var(--envelope-w);
+      /* La altura del sobre es aprox 70% del ancho (proporción real) */
+      opacity: 0;
+      animation: envelopeDrop 1s cubic-bezier(0.22, 1, 0.36, 1) 0.8s forwards;
+    }
+
+    .envelope-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 6px;
+      /*
+        Sombra multicapa para dar profundidad real al sobre.
+        La primera capa es la sombra suave ambiental,
+        la segunda es la sombra de dirección.
+      */
+      box-shadow:
+        0 10px 40px rgba(107,63,160,0.25),
+        0 30px 80px rgba(107,63,160,0.12),
+        0 2px  8px  rgba(0,0,0,0.15);
+      filter: drop-shadow(0 4px 16px rgba(107,63,160,0.3));
+    }
+
+    /* ── Sello de lacre — centrado sobre la solapa del sobre ── */
+    /*
+      El sello se posiciona ABSOLUTO dentro de .envelope-wrap.
+      top: 50% lo pone en el centro vertical del sobre,
+      que es donde está la solapa/unión del sobre morado.
+      Ajusta top/transform si necesitas moverlo.
+    */
+    .seal-wrap {
+      position: absolute;
+      left: 50%;
+      top: 52%;                      /* aprox. donde está la unión de la solapa */
+      transform: translate(-50%, -50%) scale(0) rotate(-15deg);
+      width: min(110px, 26vw);
+      cursor: pointer;
+      z-index: 20;
+      animation: sealStamp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 1.7s forwards;
+      transition: transform 0.25s ease, filter 0.25s ease;
+      /* El transform de la animación se override al terminar con animation-fill-mode:forwards */
+    }
+
+    /* Sobreescribimos transform en hover DESPUÉS de que la animación terminó */
+    .seal-wrap:hover {
+      filter: brightness(1.12) drop-shadow(0 6px 20px rgba(184,149,58,0.6));
+    }
+    /* El JS agrega .ready para habilitar el hover solo cuando terminó la animación */
+    .seal-wrap.ready {
+      transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    }
+    .seal-wrap.ready:hover {
+      transform: translate(-50%, -50%) scale(1.08) rotate(2deg);
+    }
+
+    .seal-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      /*
+        Si el sello tiene fondo negro, usa:
+          mix-blend-mode: multiply;
+        Eso hace que el negro sea transparente sobre el sobre morado.
+        Cuando tengas el PNG con fondo transparente, quita esta línea.
+      */
+      mix-blend-mode: multiply;
+    }
+
+    /* Hint "Haz click en el sello" */
+    .seal-hint {
+      position: absolute;
+      left: 50%;
+      top: calc(52% + min(62px, 14vw));   /* justo debajo del sello */
+      transform: translateX(-50%);
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(0.85rem, 3vw, 1.1rem);
+      color: var(--gold);
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      animation: fadeIn 0.8s ease 2.5s forwards;
+    }
+    /* Flechita parpadeante */
+    .seal-hint::after {
+      content: ' ↑';
+      animation: blink 1.4s ease-in-out 2.5s infinite;
+    }
+
+    /* ══════════════════════════════════
+       BLOQUE INVITADO — debajo del sobre
+    ══════════════════════════════════ */
+    .guest-block {
+      margin-top: 28px;
+      text-align: center;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 2.2s forwards;
+    }
+    .guest-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      opacity: 0.75;
+    }
+    .guest-name {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(1.8rem, 7vw, 2.6rem);
+      color: var(--purple);
+      line-height: 1.1;
+    }
+    .guest-seats {
+      margin-top: 8px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.88rem;
+      font-style: italic;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      opacity: 0.7;
+    }
+    /* Número de cupos en dorado */
+    .guest-seats strong {
+      color: var(--gold);
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    /* ══════════════════════════════════
+       OVERLAY DE TRANSICIÓN
+       Al hacer click en el sello, un overlay
+       crema cubre toda la pantalla y LUEGO
+       se va a invitacion.html
+    ══════════════════════════════════ */
+    .transition-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--cream);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.7s ease;
+    }
+    .transition-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ══════════════════════════════════
+       ANIMACIONES
+    ══════════════════════════════════ */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes envelopeDrop {
+      0%   { opacity: 0; transform: translateY(-60px) rotate(-3deg); }
+      60%  { transform: translateY(10px) rotate(1deg); }
+      80%  { transform: translateY(-4px) rotate(-0.5deg); }
+      100% { opacity: 1; transform: translateY(0) rotate(0deg); }
+    }
+    @keyframes sealStamp {
+      0%   { transform: translate(-50%, -50%) scale(0) rotate(-15deg); opacity:0; }
+      60%  { transform: translate(-50%, -50%) scale(1.18) rotate(3deg); opacity:1; }
+      80%  { transform: translate(-50%, -50%) scale(0.94) rotate(-1deg); }
+      100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity:1; }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+      50%       { opacity: 0.4; transform: translateX(-50%) translateY(-4px); }
+    }
+    @keyframes drift {
+      0%   { transform: translateY(110vh) rotate(0deg);   opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.4; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ══════════════════════════════════
+       MOBILE
+    ══════════════════════════════════ */
+    @media (max-width: 480px) {
+      .scene { gap: 0; padding: 16px; }
+      .title-block { margin-bottom: 20px; }
+      .guest-block  { margin-top: 20px; }
+    }
+
+    /* Pantallas muy cortas (landscape móvil) */
+    @media (max-height: 600px) {
+      .title-block  { margin-bottom: 10px; }
+      .guest-block  { margin-top: 12px; }
+      .seal-hint    { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ PARTÍCULAS DORADAS (generadas por JS) ══ -->
+  <div class="bg-particles" id="particles"></div>
+
+  <!-- ══ FLORES DE ESQUINA ══ -->
+  <!--
+    Mismas flores que index.html.
+    Cambia los src si cambias de imágenes.
+  -->
+  <img class="flor flor-tl" src="assets/img/flor-izquierda.png" alt="">
+  <img class="flor flor-tr" src="assets/img/flor-derecha.png"   alt="">
+  <img class="flor flor-bl" src="assets/img/flor-derecha.png"   alt="">
+  <img class="flor flor-br" src="assets/img/flor-izquierda.png" alt="">
+
+  <!-- ══ ESCENA PRINCIPAL ══ -->
+  <div class="scene">
+
+    <!-- Título -->
+    <div class="title-block">
+      <p class="eyebrow">Te invitamos a nuestra boda</p>
+      <div class="names">Karen & Luis</div>
+    </div>
+
+    <!-- Sobre + Sello -->
+    <div class="envelope-wrap" id="envelopeWrap">
+
+      <!--
+        SOBRE — imagen intercambiable.
+        Para cambiar el sobre: reemplaza assets/img/SobreMorado.webp
+        por cualquier otra imagen. El código no cambia.
+      -->
+      <img
+        class="envelope-img"
+        src="assets/img/SobreMorado.webp"
+        alt="Sobre de invitación"
+      >
+
+      <!--
+        SELLO — imagen intercambiable.
+        Para cambiar el sello: reemplaza assets/img/SelloDoradoToquesMorados.png
+        IMPORTANTE: el PNG debe tener fondo transparente.
+        Si aún tiene fondo negro, mix-blend-mode:multiply en .seal-img
+        lo hace invisible sobre el sobre morado.
+      -->
+      <div class="seal-wrap" id="sealWrap" role="button" aria-label="Abrir invitación">
+        <img
+          class="seal-img"
+          src="assets/img/SelloDoradoToquesMorados.png"
+          alt="Sello K&L"
+        >
+      </div>
+
+      <!-- Hint debajo del sello -->
+      <span class="seal-hint">Haz click en el sello</span>
+
+    </div>
+
+    <!-- Nombre y cupos del invitado -->
+    <div class="guest-block">
+      <p class="guest-label">Para</p>
+      <p class="guest-name"  id="guestName">Familia Invitada</p>
+      <p class="guest-seats" id="guestSeats"></p>
+    </div>
+
+  </div><!-- /scene -->
+
+  <!-- ══ OVERLAY DE TRANSICIÓN ══ -->
+  <div class="transition-overlay" id="overlay"></div>
+
+  <script>
+    /* ════════════════════════════════════════════════
+       1. LEER PARÁMETROS DEL LINK
+       ────────────────────────────────────────────────
+       El link llega así:
+         sobre.html?id=familia-osorio
+
+       El JS busca en la tabla de invitados el registro
+       que corresponde a ese id y muestra el nombre y cupos.
+
+       Si el id no existe → muestra datos por defecto.
+    ════════════════════════════════════════════════ */
+
+    /*
+      ┌─────────────────────────────────────────────────┐
+      │  TABLA DE INVITADOS                             │
+      │  Agrega aquí a cada familia con su id, nombre  │
+      │  y número de cupos.                             │
+      │                                                 │
+      │  El id debe coincidir EXACTAMENTE con el        │
+      │  parámetro que pongas en el link:               │
+      │    sobre.html?id=familia-osorio                 │
+      └─────────────────────────────────────────────────┘
+    */
+    const invitados = {
+      'familia-osorio':   { nombre: 'Familia Osorio',   cupos: 4 },
+      'familia-garcia':   { nombre: 'Familia García',   cupos: 2 },
+      'familia-lopez':    { nombre: 'Familia López',    cupos: 3 },
+      'familia-martinez': { nombre: 'Familia Martínez', cupos: 5 },
+      // ← Agrega más familias aquí con el mismo formato
+    };
+
+    function getParam(key) {
+      return new URLSearchParams(window.location.search).get(key);
+    }
+
+    const id        = getParam('id') || '';
+    const invitado  = invitados[id] || { nombre: 'Familia Invitada', cupos: null };
+
+    document.getElementById('guestName').textContent = invitado.nombre;
+
+    if (invitado.cupos) {
+      const cuposEl = document.getElementById('guestSeats');
+      cuposEl.innerHTML =
+        `Hemos reservado <strong>${invitado.cupos}</strong> ` +
+        `${invitado.cupos === 1 ? 'lugar' : 'lugares'} en su honor`;
+    }
+
+    /* ════════════════════════════════════════════════
+       2. REGISTRAR APERTURA EN GOOGLE SHEETS
+       ────────────────────────────────────────────────
+       Cuando alguien abre esta página, enviamos una
+       notificación silenciosa a Google Apps Script
+       que registra: id, nombre, fecha/hora, y suma 1
+       a las aperturas.
+
+       PASOS PARA ACTIVAR (los haremos juntas después):
+         1. Creas un Google Apps Script con el código
+            que te daré.
+         2. Lo publicas como "Web App".
+         3. Pegas la URL aquí en APPS_SCRIPT_URL.
+
+       Por ahora está en modo SIMULACIÓN (no envía nada).
+    ════════════════════════════════════════════════ */
+    const APPS_SCRIPT_URL = ''; // ← aquí va la URL de tu Apps Script
+
+    async function registrarApertura() {
+      if (!APPS_SCRIPT_URL || !id) return;   // simulación: no hace nada
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode:   'no-cors',                 // necesario para Google Apps Script
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            accion:   'apertura',
+            id:       id,
+            nombre:   invitado.nombre,
+            fecha:    new Date().toISOString(),
+          }),
+        });
+      } catch (e) {
+        // silencioso — no afecta la experiencia del invitado
+      }
+    }
+
+    registrarApertura();
+
+    /* ════════════════════════════════════════════════
+       3. CLICK EN EL SELLO → transición a invitacion.html
+       ────────────────────────────────────────────────
+       Habilitamos el hover SOLO cuando la animación
+       del sello terminó (2.3 s desde carga).
+       Luego el click hace un fade-out de la pantalla
+       y navega a invitacion.html manteniendo el ?id=
+       para que la invitación también sepa quién es.
+    ════════════════════════════════════════════════ */
+    const sealWrap = document.getElementById('sealWrap');
+    const overlay  = document.getElementById('overlay');
+
+    // Habilitar hover después de la animación
+    setTimeout(() => sealWrap.classList.add('ready'), 2350);
+
+    sealWrap.addEventListener('click', () => {
+      // Fade out
+      overlay.classList.add('active');
+
+      // Navegar después del fade (700ms = duración del overlay)
+      setTimeout(() => {
+        const dest = id
+          ? `invitacion.html?id=${encodeURIComponent(id)}`
+          : 'invitacion.html';
+        window.location.href = dest;
+      }, 700);
+    });
+
+    /* ════════════════════════════════════════════════
+       4. PARTÍCULAS FLOTANTES DORADAS/LILA
+       ────────────────────────────────────────────────
+       Pequeños círculos que flotan de abajo a arriba,
+       en la paleta de la boda.
+    ════════════════════════════════════════════════ */
+    const container = document.getElementById('particles');
+    const colors    = [
+      'rgba(184,149,58,0.5)',   // dorado
+      'rgba(212,175,90,0.4)',   // dorado claro
+      'rgba(139,92,200,0.35)',  // lila
+      'rgba(107,63,160,0.3)',   // morado
+      'rgba(232,213,160,0.45)', // dorado pálido
+    ];
+
+    for (let i = 0; i < 22; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+
+      const size  = 4 + Math.random() * 8;
+      const left  = Math.random() * 100;
+      const delay = Math.random() * 12;
+      const dur   = 10 + Math.random() * 14;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+
+      p.style.cssText = `
+        width:  ${size}px;
+        height: ${size}px;
+        left:   ${left}%;
+        bottom: -20px;
+        background: ${color};
+        animation-duration: ${dur}s;
+        animation-delay: ${delay}s;
+      `;
+      container.appendChild(p);
+    }
+  </script>
+</body>
+</html>
