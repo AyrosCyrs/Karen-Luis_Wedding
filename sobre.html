@@ -257,7 +257,7 @@
     }
     /* Número de cupos en dorado */
     .guest-seats strong {
-      color: var(--gold);
+      color: var(--text);
       font-style: normal;
       font-weight: 400;
     }
@@ -432,8 +432,8 @@
       'familia-garcia':   { nombre: 'Familia García',   cupos: 2 },
       'familia-lopez':    { nombre: 'Familia López',    cupos: 3 },
       'familia-martinez': { nombre: 'Familia Martínez', cupos: 5 },
-      'familia-CastroSimon':{nombre: 'Familia Castro Simon', cupos:4},
-      'familia-Tester':{nombre: 'Familia Tester', cupos:4},
+      'familia-castro-simon':{nombre: 'Familia Castro Simon', cupos:4},
+      'familia-tester':{nombre: 'Familia Tester', cupos:4},
       'familia-xxxx': {nombre: 'Familia XXXXX', cupos:1},
       // ← Agrega más familias aquí con el mismo formato
     };
@@ -483,6 +483,7 @@
             accion:   'apertura',
             id:       id,
             nombre:   invitado.nombre,
+            cupos:    invitado.cupos,
             fecha:    new Date().toISOString(),
           }),
         });
