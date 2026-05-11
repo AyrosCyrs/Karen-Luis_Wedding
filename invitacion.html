@@ -167,11 +167,10 @@
 
     .hero-photo-wrap img {
       width: 100%;
-      height: 100%;
+      height: 100hv;
       object-fit: cover;
-      /* Importante: Alineamos la foto a la derecha para que la pareja 
-        quede enmarcada ahí y deje espacio a la izquierda */
-      object-position: right center; 
+      /* 90% empuja el contenido hacia la derecha lo más posible */
+      object-position: 90% center;
       display: block;
     }
 
@@ -1099,14 +1098,16 @@
       }
 
       .hero-photo-wrap img {
-        /* Ajustamos el foco: 80% hacia la derecha para ver a la pareja y no solo el árbol */
-        object-position: 80% center; 
+        /* En móvil, 100% asegura que el borde derecho de la foto 
+          se alinee con el borde derecho de la pantalla */
+        object-position: 100% center; 
       }
-      
-      /* 3. MONOGRAMA EN CASCADA (Logo compacto) */
+
       .hero-monogram-cascade {
-        left: 4%; 
-        gap: 0; /* Eliminamos el gap para que el translateY controle el entrelazado */
+        /* Aseguramos que el monograma tenga un z-index alto 
+          y esté bien pegado a la izquierda */
+        left: 2%; 
+        z-index: 10;
       }
 
       .mono-letter {
@@ -1125,13 +1126,14 @@
 
       /* 4. SECCIONES: PADRES Y NOMBRES */
       .padres-grid { flex-direction: column; gap: 24px; }
-      .padres-col-label { font-size: 1.2rem; }
+      .padres-col-label { font-size: 2rem; }
       .padres-photo { width: 140px; height: 170px; }
 
     /* Forzamos que el nombre siempre esté arriba del texto */
       .names-row { 
         flex-direction: column !important; /* El !important anula el row-reverse del inline style */
         gap: 15px; 
+        margin: 50px;
       }
 
       /* Aseguramos que el texto de Luis también se centre y no se pegue a la derecha */
@@ -1283,7 +1285,7 @@
     </div>
 
     <!-- Y -->
-    <div class="names-y-center reveal">Y</div>
+    <div class="names-y-center reveal">&amp;</div>
 
     <!-- Luis -->
     <div class="names-row" style="flex-direction: row-reverse;">
@@ -1667,7 +1669,22 @@
       rsvpConfirma = confirma;
       document.getElementById('btnSi').classList.toggle('selected',  confirma);
       document.getElementById('btnNo').classList.toggle('selected', !confirma);
-      document.getElementById('acompGroup').style.display = confirma ? 'block' : 'none';
+    }
+
+    /* ════════════════════════════════════════
+       RSVP — REVISAR SI YA CONFIRMÓ ANTES
+    ════════════════════════════════════════ */
+    const yaConfirmo = localStorage.getItem(`rsvp-${guestId}`);
+    if (yaConfirmo) {
+      const datos = JSON.parse(yaConfirmo);
+      document.getElementById('rsvpForm').style.display = 'none';
+      document.getElementById('rsvpSuccess').classList.add('visible');
+      const msgEl = document.getElementById('rsvpSuccessMsg');
+      if (datos.confirma) {
+        msgEl.innerHTML = `¡Gracias, ${datos.nombre}!<br>Tu confirmación fue recibida. ¡Nos vemos el 23 de agosto! 🎉`;
+      } else {
+        msgEl.innerHTML = `Gracias por avisarnos, ${datos.nombre}.<br>¡Los tendremos en nuestro corazón ese día! 💛`;
+      }
     }
 
     /* ════════════════════════════════════════
@@ -1675,7 +1692,7 @@
     ════════════════════════════════════════ */
     async function enviarRsvp() {
       const nombre = document.getElementById('rsvpNombre').value.trim();
-      const btn    = document.getElementById('rsvpSubmit'); // Eliminamos la variable acomp
+      const btn    = document.getElementById('rsvpSubmit');
 
       if (!nombre) {
         document.getElementById('rsvpNombre').focus();
@@ -1690,12 +1707,11 @@
       btn.textContent = 'Enviando...';
 
       const payload = {
-        accion:       'confirmacion',
-        id:           guestId,
-        nombre:       nombre,
-        confirma:     rsvpConfirma,
-        // acompanantes: acomp,  <-- Eliminamos esta línea del objeto
-        fecha:        new Date().toISOString(),
+        accion:   'confirmacion',
+        id:       guestId,
+        nombre:   nombre,
+        confirma: rsvpConfirma,
+        fecha:    new Date().toISOString(),
       };
 
       try {
@@ -1709,8 +1725,14 @@
         // silencioso
       }
 
-      // Mostrar éxito siempre (no-cors no permite leer la respuesta)
-      document.getElementById('rsvpForm').style.display    = 'none';
+      // Guardar en localStorage para que no vuelva a ver el formulario
+      localStorage.setItem(`rsvp-${guestId}`, JSON.stringify({
+        confirma: rsvpConfirma,
+        nombre:   nombre
+      }));
+
+      // Mostrar mensaje de éxito
+      document.getElementById('rsvpForm').style.display = 'none';
       document.getElementById('rsvpSuccess').classList.add('visible');
 
       const msgEl = document.getElementById('rsvpSuccessMsg');
