@@ -155,10 +155,9 @@
     /* Foto pareja — debajo del hero, superpuesta */
     .hero-photo-wrap {
       position: relative;
-      z-index: 3;
-      margin-top: -0; /* Mayor superposición para integrar con el Hero */
+      z-index: 50;
       width: 100%;
-      height: 100%; /* Altura dramática (90% de la ventana) */
+      height: 125vh; /* Altura dramática (90% de la ventana) */
       overflow: hidden;
       display: block;
       object-position: 75% center;
@@ -167,9 +166,8 @@
 
     .hero-photo-wrap img {
       width: 100%;
-      height: 100hv;
+      height: 100%;
       object-fit: cover;
-      /* 90% empuja el contenido hacia la derecha lo más posible */
       object-position: 90% center;
       display: block;
     }
@@ -414,8 +412,8 @@
     ══════════════════════════════════════ */
     .section-fecha {
       background: var(--beige);
-      padding: 60px 24px 80px;
-      height: 600px;
+      padding: 50px 24px 80px;
+      height: 490px;
       border-top: 1px solid rgba(0,0,0,0.08);
     }
 
@@ -429,27 +427,28 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 1000px;
-      gap: 180px;
+      width: 25px;
+      gap: 25px;
     }
     .date-side-col {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 175px;
+      width: 100px;
       gap: 35px;
     }
     .date-bar {
       display: block;
-      width: 250%;
+      width: 150%;
       height: 1px;
       background: var(--text-dark);
       opacity: 0.4;
     }
     .date-month, .date-year, .date-dow {
       font-family: 'Cinzel', serif;
-      font-size: 1.75rem;
+      font-size: 1.5rem;
+      width: 150px;
       letter-spacing: 0.3em;
       color: var(--text-dark);;
       text-transform: uppercase;
@@ -483,7 +482,8 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      margin: 15px;
+      margin-top: 20px;
+      margin-bottom: 20px;
       gap: 8px;
     }
     .cd-item {
@@ -797,14 +797,14 @@
       gap: 15px;
       padding: 0 20px;
       max-width: 1000px;
-      margin: 0 auto 80px;
+      margin: 0 auto 0;
     }
 
     .collage-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 15px; /* Esquinas redondeadas estilo panal moderno */
+      border-radius: 25px; /* Esquinas redondeadas estilo panal moderno */
       transition: transform 0.4s ease;
     }
 
@@ -1094,13 +1094,11 @@
       /* 2. HERO & PHOTO WRAP */
       .hero-photo-wrap {
         height: 75vh; /* Ajustamos para mayor visibilidad */
-        margin-top: -60px; /* Reducimos la superposición para que no tape el texto del hero */
+        width: 90vh;
       }
 
       .hero-photo-wrap img {
-        /* En móvil, 100% asegura que el borde derecho de la foto 
-          se alinee con el borde derecho de la pantalla */
-        object-position: 100% center; 
+        object-position: 100% right; 
       }
 
       .hero-monogram-cascade {
@@ -1327,7 +1325,7 @@
         <div class="date-center-col">
           <span class="date-month" style="font-family:'Cinzel',serif;font-size:1.75rem;letter-spacing:.28em;color:var(--text-dark);text-transform:uppercase;margin-bottom:4px;">Agosto</span>
           <span class="date-day">23</span>
-          <span class="date-year" style="font-family:'Cinzel',serif;font-size:1.75rem;letter-spacing:.28em;color:var(--text-dark);text-transform:uppercase;margin-top:4px;">2026</span>
+          <span class="date-year" style="font-family:'Cinzel',serif;font-size:1.75rem;letter-spacing:1em;color:var(--text-dark);text-transform:uppercase;margin-top:4px;">2026</span>
         </div>
 
         <div class="date-side-col">
