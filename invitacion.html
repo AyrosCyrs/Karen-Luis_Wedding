@@ -412,58 +412,71 @@
     ══════════════════════════════════════ */
     .section-fecha {
       background: var(--beige);
-      padding: 50px 24px 80px;
-      height: 490px;
+      padding: 80px 24px; /* Eliminado height fijo para que crezca con el contenido */
       border-top: 1px solid rgba(0,0,0,0.08);
+      text-align: center;
     }
 
-    /* Reutilizamos el layout de 3 columnas del index.html */
     .date-wrap {
       display: flex;
       justify-content: center;
-      margin-bottom: 50px;
+      margin-bottom: 60px;
     }
+
     .date-row-container {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 25px;
-      gap: 25px;
+      gap: clamp(10px, 4vw, 40px); /* Espacio flexible entre columnas */
     }
+
     .date-side-col {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      width: 100px;
-      gap: 35px;
+      gap: 15px;
+      flex: 1; /* Permite que las columnas laterales midan lo mismo */
     }
+
     .date-bar {
-      display: block;
       width: 100%;
+      max-width: 120px; /* Evita que la línea sea infinita en PC */
       height: 1px;
       background: var(--text-dark);
       opacity: 0.4;
     }
-    .date-month, .date-year, .date-dow {
+
+    .date-dow {
       font-family: 'Cinzel', serif;
-      font-size: 1.5rem;
-      width: 150px;
-      letter-spacing: 0.3em;
-      color: var(--text-dark);;
+      font-size: clamp(0.9rem, 2vw, 1.3rem); /* Tamaño fluido */
+      letter-spacing: 0.2em;
+      color: var(--text-dark);
       text-transform: uppercase;
+      white-space: nowrap; /* Evita que "4:00 PM" se parta en dos líneas */
     }
+
     .date-center-col {
       display: flex;
       flex-direction: column;
       align-items: center;
+      padding: 0 10px;
     }
+
+    .date-month, .date-year {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.8rem, 1.5vw, 1.1rem);
+      letter-spacing: 0.4em;
+      color: var(--text-dark);
+      text-transform: uppercase;
+    }
+
     .date-day {
       font-family: 'Cinzel', serif;
-      font-size: clamp(3.5rem, 12vw, 7rem);
+      font-size: clamp(4rem, 15vw, 8.5rem); /* El 23 será imponente en PC */
       font-weight: 400;
       color: var(--text-dark);
-      line-height: 1;
+      line-height: 0.9;
+      margin: 5px 0;
     }
 
     /* Cuenta regresiva */
@@ -519,6 +532,11 @@
     /* ══════════════════════════════════════
        SECCIÓN 6 — ITINERARIO
     ══════════════════════════════════════ */
+    .section-title {
+      color: #1a1610; font-size: 3em; margin: 1em;
+    }
+
+
     .section-itinerario {
       background: var(--beige);
       padding: 0 24px 80px;
@@ -706,7 +724,7 @@
     .regalo-intro {
       max-width: 480px;
       margin: 0 auto 56px;
-      font-size: clamp(0.9rem, 2.5vw, 1.45rem);
+      font-size: clamp(0.9rem, 2.5vw, 1.5rem);
       font-weight: 300;
       line-height: 1.8;
       color: var(--text-dark);
@@ -756,7 +774,7 @@
 
     /* Icono regalo SVG */
     .regalo-icon {
-      width: 52px;
+      width: 80px;
       margin: 0 auto 12px;
     }
 
@@ -1089,13 +1107,14 @@
       body, html {
         overflow-x: hidden;
         width: 100%;
+        font-size: 1.3em;
         position: relative;
       }
 
       /* 2. HERO & PHOTO WRAP */
       .hero-photo-wrap {
         height: 75vh; /* Ajustamos para mayor visibilidad */
-        width: 90vh;
+        width: 85vh;
       }
 
       .hero-photo-wrap img {
@@ -1125,7 +1144,7 @@
 
       /* 4. SECCIONES: PADRES Y NOMBRES */
       .padres-grid { flex-direction: column; gap: 24px; }
-      .padres-col-label { font-size: 2rem; }
+      .padres-col-label { font-size: 3rem; }
       .padres-photo { width: 140px; height: 170px; }
 
     /* Forzamos que el nombre siempre esté arriba del texto */
@@ -1144,6 +1163,14 @@
       /* Quitamos márgenes laterales que puedan descentrar los nombres */
       .name-script {
         margin: 0 auto;
+      }
+
+      .invite-paragraph{
+        font-size: 0.85em;
+      }
+
+      .section-title{
+        font-size: 1.75em;
       }
 
       /* 5. VESTIMENTA */
@@ -1173,6 +1200,27 @@
         grid-row: span 1; 
       }
 
+      .section-fecha {
+        padding: 60px 15px;
+      }
+
+      .date-row-container {
+        gap: 10px; /* Espacio mínimo para que quepan las palabras */
+      }
+
+      .date-side-col {
+        gap: 8px;
+      }
+
+      .date-bar {
+        max-width: 60px; /* Líneas más cortas en móvil */
+      }
+
+      /* Reducimos el espaciado de letras del mes/año solo en móvil para ganar espacio */
+      .date-month, .date-year {
+        letter-spacing: 0.2em;
+      }
+
       .countdown {
         gap: 4px; /* Espacio reducido entre bloques */
         padding: 0 10px;
@@ -1195,6 +1243,34 @@
       .cd-sep {
         font-size: 1.5rem; /* Separadores más sutiles */
         padding-top: 4px;
+      }
+
+      .regalo-item-title{
+        font-size: 1.9em;
+      }
+
+      .regalo-intro{
+        font-size: 1.1em;
+      }
+
+      .rsvp-card-title{
+        font-size: 1.5em;
+      }
+
+      .form-label{
+        font-size: 0.5em;
+      }
+
+      .form-input{
+        font-size: 0.5em;
+      }
+
+      .rsvp-btn{
+        font-size: 0.5em;
+      }
+
+      .form-submit{
+        font-size: 0.5em;
       }
     }
   </style>
@@ -1324,9 +1400,9 @@
         </div>
 
         <div class="date-center-col">
-          <span class="date-month" style="font-family:'Cinzel',serif;font-size:1.75rem;letter-spacing:.28em;color:var(--text-dark);text-transform:uppercase;margin-bottom:4px;">Agosto</span>
+          <span class="date-month">Agosto</span>
           <span class="date-day">23</span>
-          <span class="date-year" style="font-family:'Cinzel',serif;font-size:1.75rem;letter-spacing:1em;color:var(--text-dark);text-transform:uppercase;margin-top:4px;">2026</span>
+          <span class="date-year">2026</span>
         </div>
 
         <div class="date-side-col">
@@ -1409,7 +1485,7 @@
        SECCIÓN 7 — CÓDIGO DE VESTIMENTA
   ══════════════════════════════════════ -->
   <section class="section-vestimenta">
-    <h2 class="section-title reveal" style="color: #1a1610; font-size: 3em; margin: 1em;">Código de Vestimenta</h2>
+    <h2 class="section-title reveal">Código de Vestimenta</h2>
 
     <div class="vestimenta-outfits reveal">
       <div class="outfit-icon">
@@ -1426,7 +1502,6 @@
           <rect x="43" y="100" width="17" height="28" rx="2" fill="#111"/>
           <circle cx="40" cy="22" r="16" fill="#d4a870"/>
         </svg>
-        <p class="outfit-label">Saco</p>
       </div>
 
       <div class="outfit-icon">
@@ -1437,13 +1512,12 @@
           <circle cx="40" cy="18" r="14" fill="#d4a870"/>
           <path d="M26 18 Q26 8 40 6 Q54 8 54 18" fill="#3a2010"/>
         </svg>
-        <p class="outfit-label">Vestido Largo</p>
       </div>
     </div>
 
     <div class="vestimenta-info reveal">
       <p class="vestimenta-tipo">Vestimenta Formal</p>
-      <p class="vestimenta-detalle">Saco y vestidos largos</p>
+      <p class="vestimenta-detalle">Traje &amp; Vestido</p>
     </div>
 
     <div class="colores-prohibidos-wrap reveal">
@@ -1461,7 +1535,7 @@
   ══════════════════════════════════════ -->
   <section class="section-regalo">
 
-    <h2 class="section-title reveal" style="color: #1a1610; font-size: 3em; margin: 1em;">Opciones de Regalo</h2>
+    <h2 class="section-title reveal">Opciones de Regalo</h2>
 
     <p class="regalo-intro reveal">
       Nuestro mejor y más grande regalo es compartir contigo este gran día.
@@ -1471,15 +1545,15 @@
     <div class="regalo-grid">
 
       <div class="regalo-item reveal">
+        <p class="regalo-item-title">¡Regalo Sorpresa!</p>
         <div class="regalo-icon">
           <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="8"  y="22" width="36" height="26" rx="2" fill="none" stroke="#3a3428" stroke-width="2"/>
+            <rect x="8"  y="22" width="36" height="26" rx="2" fill="none" stroke="#3a3428" stroke-width="3"/>
             <rect x="4"  y="16" width="44" height="8"  rx="2" fill="none" stroke="#3a3428" stroke-width="2"/>
             <line x1="26" y1="16" x2="26" y2="48" stroke="#3a3428" stroke-width="2"/>
             <path d="M20 16 Q20 8 26 8 Q32 8 32 16" stroke="#3a3428" stroke-width="2" fill="none"/>
           </svg>
         </div>
-        <p class="regalo-item-title">¡Regalo Sorpresa!</p>
         <p class="regalo-item-sub">Estamos seguros de que nos encantará</p>
       </div>
 
@@ -1563,7 +1637,7 @@
           </div>
         </div>
 
-        <button class="form-submit" id="rsvpSubmit" onclick="enviarRsvp()">RSVP</button>
+        <button class="form-submit" id="rsvpSubmit" onclick="enviarRsvp()"> Enviar </button>
         <p class="rsvp-note">Tu información es confidencial y solo será usada para la organización de la boda.</p>
 
       </div>
@@ -1617,12 +1691,12 @@
     function getParam(k) {
       return new URLSearchParams(window.location.search).get(k);
     }
-    const guestId = getParam('id') || '';
+    const guestId = (getParam('id') || '').toLowerCase();
 
     /* ════════════════════════════════════════
        CUENTA REGRESIVA
     ════════════════════════════════════════ */
-    const boda = new Date('2026-08-23T16:00:00-06:00');
+    const boda = new Date('2026-08-23T13:00:00-06:00');
 
     function tick() {
       const diff = boda - new Date();
@@ -1659,9 +1733,49 @@
 
     revealEls.forEach(el => observer.observe(el));
 
-    /* ════════════════════════════════════════
-       RSVP — SELECCIÓN SÍ / NO
-    ════════════════════════════════════════ */
+    /* ── RSVP — MOSTRAR ESTADO SEGÚN SHEETS ── */
+    function mostrarConfirmado(confirma, nombre) {
+      document.getElementById('rsvpForm').style.display = 'none';
+      document.getElementById('rsvpSuccess').classList.add('visible');
+      const msgEl = document.getElementById('rsvpSuccessMsg');
+      if (confirma) {
+        msgEl.innerHTML = `¡Gracias, ${nombre}!<br>Tu confirmación fue recibida. ¡Nos vemos el 23 de agosto! 🎉`;
+      } else {
+        msgEl.innerHTML = `Gracias por avisarnos, ${nombre}.<br>¡Los tendremos en nuestro corazón ese día! 💛`;
+      }
+    }
+
+    async function verificarRsvp() {
+      if (!guestId) return;
+
+      // Primero revisa localStorage (rápido, sin red)
+      const local = localStorage.getItem(`rsvp-${guestId}`);
+      if (local) {
+        const datos = JSON.parse(local);
+        mostrarConfirmado(datos.confirma, datos.nombre);
+        return;
+      }
+
+      // Si no hay local, consulta Google Sheets (fuente de verdad)
+      try {
+        const res  = await fetch(`${APPS_SCRIPT_URL}?id=${encodeURIComponent(guestId)}`);
+        const data = await res.json();
+        if (data.confirmado) {
+          // Guarda en localStorage para la próxima vez (más rápido)
+          localStorage.setItem(`rsvp-${guestId}`, JSON.stringify({
+            confirma: data.confirma,
+            nombre:   data.nombre
+          }));
+          mostrarConfirmado(data.confirma, data.nombre);
+        }
+      } catch(e) {
+        // Si falla la consulta, simplemente muestra el formulario normal
+      }
+    }
+
+    verificarRsvp();
+
+    /* ── RSVP — SELECCIÓN SÍ / NO ── */
     let rsvpConfirma = null;
 
     function selectRsvp(confirma) {
@@ -1670,39 +1784,15 @@
       document.getElementById('btnNo').classList.toggle('selected', !confirma);
     }
 
-    /* ════════════════════════════════════════
-       RSVP — REVISAR SI YA CONFIRMÓ ANTES
-    ════════════════════════════════════════ */
-    const yaConfirmo = localStorage.getItem(`rsvp-${guestId}`);
-    if (yaConfirmo) {
-      const datos = JSON.parse(yaConfirmo);
-      document.getElementById('rsvpForm').style.display = 'none';
-      document.getElementById('rsvpSuccess').classList.add('visible');
-      const msgEl = document.getElementById('rsvpSuccessMsg');
-      if (datos.confirma) {
-        msgEl.innerHTML = `¡Gracias, ${datos.nombre}!<br>Tu confirmación fue recibida. ¡Nos vemos el 23 de agosto! 🎉`;
-      } else {
-        msgEl.innerHTML = `Gracias por avisarnos, ${datos.nombre}.<br>¡Los tendremos en nuestro corazón ese día! 💛`;
-      }
-    }
-
-    /* ════════════════════════════════════════
-       RSVP — ENVIAR
-    ════════════════════════════════════════ */
+    /* ── RSVP — ENVIAR ── */
     async function enviarRsvp() {
       const nombre = document.getElementById('rsvpNombre').value.trim();
       const btn    = document.getElementById('rsvpSubmit');
 
-      if (!nombre) {
-        document.getElementById('rsvpNombre').focus();
-        return;
-      }
-      if (rsvpConfirma === null) {
-        alert('Por favor indica si asistirás.');
-        return;
-      }
+      if (!nombre) { document.getElementById('rsvpNombre').focus(); return; }
+      if (rsvpConfirma === null) { alert('Por favor indica si asistirás.'); return; }
 
-      btn.disabled = true;
+      btn.disabled    = true;
       btn.textContent = 'Enviando...';
 
       const payload = {
@@ -1720,26 +1810,14 @@
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify(payload),
         });
-      } catch(e) {
-        // silencioso
-      }
+      } catch(e) { /* silencioso */ }
 
-      // Guardar en localStorage para que no vuelva a ver el formulario
+      // Guardar localmente y mostrar éxito
       localStorage.setItem(`rsvp-${guestId}`, JSON.stringify({
         confirma: rsvpConfirma,
         nombre:   nombre
       }));
-
-      // Mostrar mensaje de éxito
-      document.getElementById('rsvpForm').style.display = 'none';
-      document.getElementById('rsvpSuccess').classList.add('visible');
-
-      const msgEl = document.getElementById('rsvpSuccessMsg');
-      if (rsvpConfirma) {
-        msgEl.innerHTML = `¡Gracias, ${nombre}!<br>Tu confirmación fue recibida. ¡Nos vemos el 23 de agosto! 🎉`;
-      } else {
-        msgEl.innerHTML = `Gracias por avisarnos, ${nombre}.<br>¡Los tendremos en nuestro corazón ese día! 💛`;
-      }
+      mostrarConfirmado(rsvpConfirma, nombre);
     }
   </script>
 </body>
