@@ -428,17 +428,86 @@
       └─────────────────────────────────────────────────┘
     */
     const invitados = {
-      'familia-osorio':   { nombre: 'Familia Osorio',   cupos: 4 },
-      'familia-garcia':   { nombre: 'Familia García',   cupos: 2 },
-      'familia-lopez':    { nombre: 'Familia López',    cupos: 3 },
-      'familia-martinez': { nombre: 'Familia Martínez', cupos: 5 },
-      'familia-castro-simon':{nombre: 'Familia Castro Simon', cupos:4},
-      'familia-tester':{nombre: 'Familia Tester', cupos:7},
-      'familia-tester1':{nombre: 'Familia Tester 1', cupos:4},
-      'familia-tester2':{nombre: 'Familia Tester 2', cupos:4},
+
+      /** Familias de Prueba*/
+      'familia-tester00':{nombre: 'Familia Testerre 0', cupos:1},
+      'familia-tester1':{nombre: 'Familia Tester 1', cupos:2},
+      'familia-tester2':{nombre: 'Familia Tester 2', cupos:3},
       'familia-tester3':{nombre: 'Familia Tester 3', cupos:4},
-      'familia-tester4':{nombre: 'Familia Tester 4', cupos:4},
-      // ← Agrega más familias aquí con el mismo formato
+      'familia-tester4':{nombre: 'Familia Tester 4', cupos:5},
+
+      /** Hermanos = 60 Invitados */
+      'familia-franco': {nombre: 'Familia Franco Becerril', cupos:4},
+      'familia-dominguez': {nombre: 'Familia Dominguez Aburto', cupos:3},
+      'familia-arriaga': {nombre: 'Familia Arriaga', cupos:1},
+      'familia-rodriguez': {nombre: 'Familia Rodríguez', cupos:2},
+      'familia-becerril': {nombre: 'Familia Becerril Arreola', cupos:3},
+      'familia-cosme': {nombre: 'Familia Cosme', cupos:3},                         /* Originales, Cinthia, papa y eduardo*/
+      'familia-cosme1': {nombre: 'Familia Cosme', cupos:2},                        /* Arturo % Mabel */
+      'familia-cosme2': {nombre: 'Daniel Cosme', cupos:1},                         /* Daniel Cosme*/
+      'familia-cosme3': {nombre: 'Familia Cosme', cupos:2},                        /* Ivan & Jimena*/
+      'familia-ramirez': {nombre: 'Familia Ramirez Carrales', cupos:2},
+      'familia-gonzalez': {nombre: 'Dafne González Flores', cupos:1},
+      'familia-guzman': {nombre: 'Familia Guzman', cupos:4},
+      'familia-corona': {nombre: 'Familia Corona', cupos:2},
+      'familia-maltos': {nombre: 'Jenny Maltos', cupos:1},
+      'familia-olvera-lopez': {nombre: 'Familia Olvera López', cupos:2},
+      'familia-olvera': {nombre: 'Familia Olvera', cupos:3},
+      'familia-lopez-ibarra': {nombre: 'Familia López Ibarra', cupos:4},
+      'familia-lolita': {nombre: 'Familia Lolita', cupos:1},                       /* Revisar */
+      'familia-tirado': {nombre: 'Familia Tirado', cupos:4},
+      'familia-nieto': {nombre: 'Familia Nieto', cupos:5},
+      'familia-rojas': {nombre: 'Familia Rojas', cupos:2},                         /* Maru y esposo*/
+      'familia-neri': {nombre: 'Familia Neri', cupos:4},
+      'familia-ibarra': {nombre: 'Familia Ibarra Navarro', cupos:2},
+      'familia-castellanos': {nombre: 'Aviud Castellanos', cupos:1},               /* Nota */
+      'familia-acosta': {nombre: 'Sergio Acosta', cupos:1},                        /* Nota */
+
+
+      /** Familia Novia = 25 invitados*/
+      'familia-mama': { nombre: 'Silvia Alejandra Lopez Castro', cupos: 4 },       /* Nota */
+      'familia-osorio1':   { nombre: 'Raymundo Osorio Garcia',   cupos: 1 },       /* Nota */
+      'familia-castro-simon':{nombre: 'Familia Castro Simon', cupos:4},
+      'familia-lopez1': {nombre: 'Jose Lopez Castro', cupos:1},
+      'familia-lopez': {nombre: 'Adrian Lopez Castro', cupos:12},
+      'familia-amayo': {nombre: 'Alonso Amayo', cupos:1},
+      'familia-villanueva': {nombre: 'Fernanda Villanueva Bernabe', cupos:1},
+      'familia-remigio': {nombre: 'Familia de Remigio Lopez Delgado', cupos:3},
+      'familia-ines': {nombre: 'Familia de Ines Lopez Delgado', cupos:4},
+      'familia-margarita': {nombre: 'Familia de Margarita de Lopez', cupos:9},    /* P E N D I E N T E */
+      'familia-gloria': {nombre: 'Familia Gloria Lopez Delgado', cupos:1},        /* P E N D I E N T E */
+
+
+      /**Familia Novio = 86 invitados */
+      'familia-tamaniz': {nombre: 'Familia Tamaniz Amel', cupos:6},
+      'familia-saturnino': {nombre: 'Familia de Saturnino Tamaniz', cupos:8},
+      'familia-decideria': {nombre: 'Decideria Amel', cupos:1},
+      'familia-miguel': {nombre: 'Familia de Miguel Tamaniz', cupos:5},
+      'familia-carmelo': {nombre: 'Familia de Carmelo Tamaniz', cupos:4},
+      'familia-daniela': {nombre: 'Familia de Daniela Tamaniz', cupos:4},
+      'familia-tamaniz-vasquez': {nombre: 'Familia Tamaniz Vasquez', cupos:2},
+      'familia-antonio': {nombre: 'Familia de Antonio Amel', cupos:4},
+      'familia-nayeli': {nombre: 'Familia de Nayeli Tepetzintan', cupos:4},
+      'familia-vasquez': {nombre: 'Familia Vasquez Amel', cupos:2},
+      'familia-juan': {nombre: 'Familia de Juan Carlos Vasquez Amel', cupos:2},
+      'familia-maira': {nombre: 'Familia de Maira Vasquez Amel', cupos:3},
+      'familia-carmela': {nombre: 'Familia Carmela Amel Cuacuil', cupos:2},
+      'familia-gilberto': {nombre: 'Familia de Gilberto Amel', cupos:3},
+      'familia-dulce': {nombre: 'Familia de Dulce Amel', cupos:4},
+      'familia-imelda': {nombre: 'Familia de Imelda Amel Cuacuil', cupos:3},
+      'familia-gabriela': {nombre: 'Familia de Gabriela Amel Cuacuil', cupos:4},
+      'familia-idalia': {nombre: 'Familia de Idalia Amel Cuacuil', cupos:4},
+      'familia-belen': {nombre: 'Familia de Belen Amel', cupos:2},
+      'familia-angeles': {nombre: 'Familia de Angeles Amel', cupos:3},
+      'familia-eudelia': {nombre: 'Familia de Eudelia Amel', cupos:2},
+      'familia-hermelindo': {nombre: 'Familia de Hermelindo Amel', cupos:2},
+      'familia-hugo': {nombre: 'Familia de Hugo Tamaniz', cupos:2},
+      'familia-jorge': {nombre: 'Jorge Tamaniz', cupos:1},
+      'familia-ivan': {nombre: 'Ivan Tamaniz', cupos:1},
+      'familia-geovani': {nombre: 'Geovani Tamaniz', cupos:1},
+      'familia-baldo': {nombre: 'Familia Tamaniz Baldo', cupos:3},
+      'familia-cristian': {nombre: 'Cristian Tamaniz', cupos:1},
+      'familia-nieto-rojas': {nombre: 'Familia Nieto Rosas', cupos:3},
     };
 
     function getParam(key) {
@@ -457,22 +526,6 @@
         `${invitado.cupos === 1 ? 'lugar' : 'lugares'} en su honor`;
     }
 
-    /* ════════════════════════════════════════════════
-       2. REGISTRAR APERTURA EN GOOGLE SHEETS
-       ────────────────────────────────────────────────
-       Cuando alguien abre esta página, enviamos una
-       notificación silenciosa a Google Apps Script
-       que registra: id, nombre, fecha/hora, y suma 1
-       a las aperturas.
-
-       PASOS PARA ACTIVAR (los haremos juntas después):
-         1. Creas un Google Apps Script con el código
-            que te daré.
-         2. Lo publicas como "Web App".
-         3. Pegas la URL aquí en APPS_SCRIPT_URL.
-
-       Por ahora está en modo SIMULACIÓN (no envía nada).
-    ════════════════════════════════════════════════ */
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxf7mcWIdCsYfkv76nPGi2axCjxRgvJnKWD7uvcEWdY60iDy3IPtypLe2zZkoaeuLGz/exec';
 
     async function registrarApertura() {
