@@ -539,6 +539,7 @@
             accion:   'apertura',
             id:       id,
             nombre:   invitado.nombre,
+            tag:     invitado.nombre,  // ← el nombre canónico que tú asignaste
             cupos:    invitado.cupos,
             fecha:    new Date().toISOString(),
           }),

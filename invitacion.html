@@ -2010,9 +2010,9 @@
       document.getElementById('rsvpSuccess').classList.add('visible');
       const msgEl = document.getElementById('rsvpSuccessMsg');
       if (confirma) {
-        msgEl.innerHTML = `¡Gracias, ${nombre}!<br>Tu confirmación fue recibida. ¡Nos vemos el 23 de agosto! 🎉`;
+        msgEl.innerHTML = `¡Gracias, ${sanitizar(nombre)}!<br>Tu confirmación fue recibida. ¡Nos vemos el 23 de agosto! 🎉`;
       } else {
-        msgEl.innerHTML = `Gracias por avisarnos, ${nombre}.<br>¡Los tendremos en nuestro corazón ese día! 💛`;
+        msgEl.innerHTML = `Gracias por avisarnos, ${sanitizar(nombre)}.<br>¡Los tendremos en nuestro corazón ese día! 💛`;
       }
     }
 
@@ -2055,9 +2055,18 @@
       document.getElementById('btnNo').classList.toggle('selected', !confirma);
     }
 
+    /* ════════════════════════════════════════
+      SANITIZACIÓN
+    ════════════════════════════════════════ */
+    function sanitizar(str) {
+      const div = document.createElement('div');
+      div.textContent = str;  // escapa HTML automáticamente
+      return div.innerHTML;
+    }
+
     /* ── RSVP — ENVIAR ── */
     async function enviarRsvp() {
-      const nombre = document.getElementById('rsvpNombre').value.trim();
+      const nombre = document.getElementById('rsvpNombre').value.trim().slice(0, 100);
       const btn    = document.getElementById('rsvpSubmit');
 
       if (!nombre) { document.getElementById('rsvpNombre').focus(); return; }
