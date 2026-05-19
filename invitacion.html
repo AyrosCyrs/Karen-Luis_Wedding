@@ -1310,9 +1310,142 @@
         font-size: 0.5em;
       }
     }
+
+    /* ══════════════════════════════════════
+        PANTALLA POST-BODA
+      ══════════════════════════════════════ */
+      .postboda-screen {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: var(--dark);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 40px 24px;
+      }
+      .postboda-screen.activa {
+        display: flex;
+      }
+      .postboda-emoji {
+        font-size: 3rem;
+        margin-bottom: 24px;
+      }
+      .postboda-title {
+        font-family: 'Great Vibes', cursive;
+        font-size: clamp(2.5rem, 10vw, 4rem);
+        color: var(--cream);
+        margin-bottom: 16px;
+        line-height: 1.2;
+      }
+      .postboda-msg {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(1rem, 3vw, 1.2rem);
+        font-style: italic;
+        font-weight: 300;
+        color: var(--cream);
+        opacity: 0.75;
+        max-width: 480px;
+        line-height: 1.8;
+        margin-bottom: 48px;
+      }
+      /* Campo de contraseña — discreto, pequeño abajo */
+      .postboda-lock {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        opacity: 0.4;
+        transition: opacity 0.3s;
+      }
+      .postboda-lock:hover,
+      .postboda-lock:focus-within {
+        opacity: 1;
+      }
+      .postboda-lock-label {
+        font-family: 'Cinzel', serif;
+        font-size: 0.6rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--cream);
+      }
+      .postboda-lock-input {
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid var(--gold);
+        color: var(--cream);
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1rem;
+        text-align: center;
+        width: 160px;
+        padding: 6px 0;
+        outline: none;
+        letter-spacing: 0.15em;
+      }
+      .postboda-lock-input::placeholder {
+        color: var(--cream);
+        opacity: 0.3;
+      }
+      .postboda-lock-btn {
+        background: transparent;
+        border: 1px solid var(--gold);
+        color: var(--gold);
+        font-family: 'Cinzel', serif;
+        font-size: 0.6rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        padding: 8px 20px;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+        border-radius: 2px;
+      }
+      .postboda-lock-btn:hover {
+        background: var(--gold);
+        color: var(--dark);
+      }
+      .postboda-lock-error {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 0.85rem;
+        color: #e07070;
+        font-style: italic;
+        min-height: 20px;
+      }
   </style>
 </head>
 <body>
+
+  <!-- ══ PANTALLA POST-BODA ══ -->
+    <div class="postboda-screen" id="postbodaScreen">
+
+      <div class="postboda-emoji">💍</div>
+
+      <h1 class="postboda-title">¡Gracias por<br>acompañarnos!</h1>
+
+      <p class="postboda-msg">
+        El 23 de agosto de 2026 fue un día que guardaremos<br>
+        por siempre en nuestros corazones.<br><br>
+        Gracias por hacer parte de nuestra historia.
+      </p>
+
+      <!-- Candado discreto para los novios -->
+      <div class="postboda-lock">
+        <p class="postboda-lock-label">🔒 Acceso privado</p>
+        <input
+          class="postboda-lock-input"
+          type="password"
+          id="postbodaPass"
+          placeholder="contraseña"
+          maxlength="50"
+        >
+        <button class="postboda-lock-btn" id="postbodaBtn" onclick="verificarPass()">
+          Entrar
+        </button>
+        <p class="postboda-lock-error" id="postbodaError"></p>
+      </div>
+
+    </div>
   <audio id="bgMusic" loop preload="auto">
     <source src="assets/audio/ElvisPresley_ICantHelpFallingInLove.mp3" type="audio/mpeg">
   </audio>
@@ -1729,6 +1862,95 @@
     </footer>
 
   <script>
+
+    /* ════════════════════════════════════════
+      TIMEOUT POST-BODA CON CONTRASEÑA
+    ════════════════════════════════════════ */
+
+    // Fecha a partir de la cual se activa el bloqueo
+    const fechaPostBoda = new Date('2026-08-24T00:00:00-06:00');
+    const esPostBoda    = new Date() > fechaPostBoda;
+
+    /*
+      CONTRASEÑA — cámbiala por algo que solo Karen y Luis sepan.
+      No uses datos obvios como su fecha de boda.
+      Ejemplo: una frase corta memorable para ellos.
+
+      IMPORTANTE: esto es seguridad por oscuridad — es suficiente
+      para este caso de uso (fotos de boda) pero no para datos
+      bancarios críticos. La cuenta BBVA ya debería estar inactiva
+      después de la boda de todas formas.
+    */
+    const PASS_CORRECTA = 'K4r3n&Lu1s385#$';  // ← cámbiala
+
+    function mostrarPostBoda() {
+      document.getElementById('postbodaScreen').classList.add('activa');
+    }
+
+    function ocultarPostBoda() {
+      document.getElementById('postbodaScreen').classList.remove('activa');
+    }
+
+    async function hashear(texto) {
+      const encoder = new TextEncoder();
+      const data     = encoder.encode(texto);
+      const hash     = await crypto.subtle.digest('SHA-256', data);
+      const arr      = Array.from(new Uint8Array(hash));
+      return arr.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function verificarPass() {
+      const input = document.getElementById('postbodaPass');
+      const error = document.getElementById('postbodaError');
+      const btn   = document.getElementById('postbodaBtn'); // agrega id al botón
+      const pass  = input.value.trim();
+
+      if (!pass) return;
+
+      btn.textContent = '...';
+      btn.disabled    = true;
+
+      try {
+        const hash = await hashear(pass);
+        const res  = await fetch(
+          `${APPS_SCRIPT_URL}?accion=verificar-pass&hash=${hash}`
+        );
+        const data = await res.json();
+
+        if (data.ok) {
+          localStorage.setItem('boda-acceso', 'ok');
+          ocultarPostBoda();
+          error.textContent = '';
+        } else {
+          error.textContent = 'Contraseña incorrecta';
+          setTimeout(() => { error.textContent = ''; }, 3000);
+        }
+      } catch(e) {
+        error.textContent = 'Error de conexión, intenta de nuevo';
+      } finally {
+        btn.textContent = 'Entrar';
+        btn.disabled    = false;
+        input.value     = '';
+        input.focus();
+      }
+    }
+
+    // Permitir Enter en el input
+    document.getElementById('postbodaPass')
+      .addEventListener('keydown', e => {
+        if (e.key === 'Enter') verificarPass();
+      });
+
+    // Verificar al cargar la página
+    if (esPostBoda) {
+      const accesoGuardado = localStorage.getItem('boda-acceso');
+      if (accesoGuardado !== 'ok') {
+        mostrarPostBoda();
+      }
+      // Si ya tiene acceso guardado, no muestra el bloqueo
+    }
+
+
     /* ════════════════════════════════════════
        CONFIGURACIÓN
     ════════════════════════════════════════ */
