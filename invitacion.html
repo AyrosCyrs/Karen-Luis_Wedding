@@ -1110,27 +1110,32 @@
     }
 
     /* ── BOTÓN DE MÚSICA ── */
-  .music-btn {
+    .music-btn {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
+    bottom: 28px;
+    right: 28px;
     z-index: 999;
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
-    background: rgba(42,40,32,0.85);
+    background: rgba(42,40,32,0.9);
     border: 1px solid var(--gold);
     color: var(--gold);
-    font-size: 1.1rem;
+    font-size: 1rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     backdrop-filter: blur(6px);
     transition: transform 0.2s, background 0.2s;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    padding: 0;          /* elimina padding que descentra el icono */
+    line-height: 1;      /* evita que el emoji se desplace */
   }
-  .music-btn:hover { transform: scale(1.1); background: rgba(42,40,32,1); }
+  .music-btn:hover {
+    transform: scale(1.1);
+    background: rgba(42,40,32,1);
+  }
 
     /* ══════════════════════════════════════
     MOBILE (VERSION INTEGRADA Y CORREGIDA)
@@ -1412,6 +1417,50 @@
         font-style: italic;
         min-height: 20px;
       }
+
+      /* ── CALENDARIO ── */
+      .calendar-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        margin-top: 32px;
+      }
+      .calendar-label {
+        font-family: 'Cinzel', serif;
+        font-size: 0.95rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--text-dark);
+        opacity: 0.75;
+      }
+      .calendar-btns {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .cal-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 20px;
+        border: 1px solid var(--beige-dark);
+        border-radius: 50px;
+        font-family: 'Cinzel', serif;
+        font-size: 0.62rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: var(--text-dark);
+        background: var(--beige-light);
+        transition: background 0.2s, color 0.2s, border-color 0.2s;
+      }
+      .cal-btn:hover {
+        background: var(--dark);
+        color: var(--cream);
+        border-color: var(--dark);
+      }
   </style>
 </head>
 <body>
@@ -1606,6 +1655,27 @@
       <div class="cd-item">
         <span class="cd-num" id="cd-seg">—</span>
         <span class="cd-unit">Seg</span>
+      </div>
+    </div>
+
+    <!-- Agregar al calendario -->
+    <div class="calendar-wrap reveal">
+      <p class="calendar-label">Agregar al calendario</p>
+      <div class="calendar-btns">
+
+        <a class="cal-btn"
+          href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda+Karen+%26+Luis+%F0%9F%92%8D&dates=20260823T220000Z/20260824T060000Z&details=Recepci%C3%B3n+en+Sal%C3%B3n+Palacio+Real%2C+Hecelchak%C3%A1n+89%2C+Tlalpan%2C+CDMX&location=Hecelchak%C3%A1n+89%2C+Cuchilla+de+Padierna%2C+Tlalpan%2C+CDMX"
+          target="_blank"
+          rel="noopener noreferrer">
+          📅 Google Calendar
+        </a>
+
+        <a class="cal-btn"
+          href="assets/boda.ics"
+          download="Boda_Karen_Luis.ics">
+          🍎 Apple / Outlook
+        </a>
+
       </div>
     </div>
 
@@ -2104,23 +2174,29 @@
     const audio    = document.getElementById('bgMusic');
     const musicBtn = document.getElementById('musicBtn');
 
-    // Empieza desde el segundo 32 (cámbialo al momento que quieras)
     audio.currentTime = 8;
-    audio.volume = 0.15;  // volumen suave (0 = mudo, 1 = máximo)
+    audio.volume      = 0.25;
 
-    // Los navegadores bloquean autoplay — esperamos el primer click del usuario
-    document.addEventListener('click', function startMusic() {
-      audio.play();
-      musicBtn.textContent = '♪';
+    // Arrancar con primer click en la página
+    let musicStarted = false;
+    document.addEventListener('click', function startMusic(e) {
+      if (musicStarted) return;
+      if (e.target === musicBtn) return; // el botón lo maneja su propio listener
+      musicStarted = true;
+      audio.play().then(() => {
+        musicBtn.textContent = '♪';
+      }).catch(() => {});
       document.removeEventListener('click', startMusic);
-    }, { once: true });
+    });
 
-    // Botón para pausar/reanudar
+    // Botón pausa/play
     musicBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       if (audio.paused) {
-        audio.play();
-        musicBtn.textContent = '♪';
+        audio.play().then(() => {
+          musicBtn.textContent = '♪';
+          musicStarted = true;
+        }).catch(() => {});
       } else {
         audio.pause();
         musicBtn.textContent = '▶';
